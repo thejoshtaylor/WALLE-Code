@@ -1,6 +1,7 @@
 from pyPS4Controller.controller import Controller
 import serial
 from time import sleep
+import struct
 
 ser = serial.Serial("/dev/ttyS0", 9600)
 # while True:
@@ -16,14 +17,24 @@ class MyController(Controller):
 		Controller.__init__(self, **kwargs)
 		
 	def on_x_press(self):
-		print("Hello world")
-		ser.write('3'.encode('utf-8'));
+		msg = struct.pack('>B', 255)
+		print(msg)
+		ser.write(msg)
 		
 	def on_x_release(self):
-		print("Goodbye world")
+		msg = struct.pack('>B', 0)
+		print(msg)
+		ser.write(msg)
 		
 	def on_R2_press(self, value):
-		ser.write(round((value + 32767) / 6537));
+		msg = struct.pack('>B', round((value + 32767) / 257))
+		print(msg)
+		ser.write(msg)
+		
+	def on_R2_release(self, ):
+		msg = struct.pack('>B', 0)
+		print(msg)
+		ser.write(msg)
 		
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(timeout=60)
