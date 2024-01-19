@@ -17,7 +17,7 @@ class MyController(Controller):
 		Controller.__init__(self, **kwargs)
 		
 	def on_x_press(self):
-		msg = struct.pack('>B', 255)
+		msg = struct.pack('>B', 250)
 		print(msg)
 		ser.write(msg)
 		
