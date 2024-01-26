@@ -6,8 +6,8 @@
 
 #define DIR1 22
 #define PWM1 23
-#define DIR2 19
-#define PWM2 20
+#define DIR2 14
+#define PWM2 15
 
 int dev = -1;
 
