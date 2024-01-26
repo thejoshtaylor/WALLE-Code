@@ -18,23 +18,33 @@ class MyController(Controller):
 		
 	def on_x_press(self):
 		msg = struct.pack('>B', 250)
-		print(msg)
-		ser.write(msg)
+		print('L', msg)
+		ser.write(b'L' + msg)
 		
 	def on_x_release(self):
 		msg = struct.pack('>B', 0)
-		print(msg)
-		ser.write(msg)
+		print('L', msg)
+		ser.write(b'L' + msg)
+		
+	def on_L2_press(self, value):
+		msg = struct.pack('>B', round((value + 32767) / 257))
+		print('L', msg)
+		ser.write(b'L' + msg)
+		
+	def on_L2_release(self, ):
+		msg = struct.pack('>B', 0)
+		print('L', msg)
+		ser.write(b'L' + msg)
 		
 	def on_R2_press(self, value):
 		msg = struct.pack('>B', round((value + 32767) / 257))
-		print(msg)
-		ser.write(msg)
+		print('R', msg)
+		ser.write(b'R' + msg)
 		
 	def on_R2_release(self, ):
 		msg = struct.pack('>B', 0)
-		print(msg)
-		ser.write(msg)
+		print('R', msg)
+		ser.write(b'R' + msg)
 		
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(timeout=60)
