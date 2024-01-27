@@ -116,7 +116,7 @@ def update_drive(x, y):
 	elif drive_angle > pi / 2 and drive_angle < pi:
 		# Put scale between -1 and 1
 		scale = drive_angle - (3 * pi / 4)
-		scale = scale / (pi / 4)
+		scale = -scale / (pi / 4)
 		# Linearly scale speed
 		leftSpeed = scale * drive_speed
 	elif drive_angle > 3 * pi / 2 and drive_angle < 2 * pi:
@@ -140,7 +140,7 @@ def update_drive(x, y):
 	elif drive_angle > pi and drive_angle < 3 * pi / 2:
 		# Put scale between -1 and 1
 		scale = drive_angle - (5 * pi / 4)
-		scale = scale / (pi / 4)
+		scale = -scale / (pi / 4)
 		# Linearly scale speed
 		rightSpeed = scale * drive_speed
 
