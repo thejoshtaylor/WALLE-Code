@@ -38,12 +38,15 @@ char data[32];
 // Checksum
 char checksum = 0;
 
+// Last message time
+unsigned long lastMessage = 0;
+
 void setup() {
   
   Serial.begin(115200);
   Serial.println("Start");
 
-  Serial1.begin(115200);
+  Serial1.begin(9600);
 
 }
 
@@ -52,15 +55,23 @@ void loop() // run over and over
   // Get message from rpi
   if (Serial1.available())
   {
+    lastMessage = millis();
     // Determine what part of the message we're supposed to read
     // 0-5: Intro
     if (status < 6)
     {
+      char in;
       // Wait for the first byte of the message
-      if (Serial1.read() == intro[status])
+      if ((in = Serial1.read()) == intro[status])
         status++;
       else
+      {
+        Serial.print("BAD INTRO, ");
+        Serial.print(in);
+        Serial.print(" != ");
+        Serial.println(intro[status]);
         status = 255;
+      }
     }
     // 6: Type
     else if (status == 6)
@@ -87,7 +98,10 @@ void loop() // run over and over
       
       // Checksum is incorrect
       if (sum != checksum)
+      {
+        Serial.println("BAD CHECKSUM");
         status = 255;
+      }
       else
         status++;
     }
@@ -98,7 +112,10 @@ void loop() // run over and over
       if (Serial1.read() == terminator[status - 40])
         status++;
       else
+      {
+        Serial.println("BAD TERMINATOR");
         status = 255;
+      }
     }
 
     // Complete message indicator
@@ -107,9 +124,13 @@ void loop() // run over and over
       // Handle the message
       if (type == 1)
       {
+        Serial.print("GOT MESSAGE\t");
         // Normal operation
         leftSpeed = (data[0] << 8) | data[1];
+        Serial.print(leftSpeed);
+        Serial.print("\t");
         rightSpeed = (data[2] << 8) | data[3];
+        Serial.println(rightSpeed);
 
         leftArmLength = (data[4] << 8) | data[5];
         rightArmLength = (data[6] << 8) | data[7];
@@ -129,31 +150,38 @@ void loop() // run over and over
       // Reset status
       status = 0;
     }
+  }
 
-    // Bad message indicator
-    if (status == 255)
-    {
-      // Set all values to zero
-      leftSpeed = 0;
-      rightSpeed = 0;
+  // Check for timeout
+  if (millis() - lastMessage > 1000)
+  {
+    Serial.println("TIMEOUT");
+    status = 255;
+  }
 
-      leftArmLength = 0;
-      rightArmLength = 0;
+  // Bad message indicator
+  if (status == 255)
+  {
+    // Set all values to zero
+    leftSpeed = 0;
+    rightSpeed = 0;
 
-      leftArmAngle = 0;
-      rightArmAngle = 0;
+    leftArmLength = 0;
+    rightArmLength = 0;
 
-      leftWingAngle = 0;
-      rightWingAngle = 0;
+    leftArmAngle = 0;
+    rightArmAngle = 0;
 
-      leftHandAngle = 0;
-      rightHandAngle = 0;
+    leftWingAngle = 0;
+    rightWingAngle = 0;
 
-      bigFaceLatch = true;
+    leftHandAngle = 0;
+    rightHandAngle = 0;
 
-      // Reset status
-      Serial.println("Bad message");
-      status = 0;
-    }
+    bigFaceLatch = true;
+
+    // Reset status
+    Serial.println("BAD MESSAGE");
+    status = 0;
   }
 }

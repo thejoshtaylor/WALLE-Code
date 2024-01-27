@@ -1,7 +1,7 @@
 import serial
 from time import sleep
 
-ser = serial.Serial("/dev/ttyS0", 115200)
+ser = serial.Serial("/dev/ttyS0", 9600)
 
 
 
@@ -30,10 +30,13 @@ bigFaceLatch = True
 def send_default_packet():
 
 	# Intro
-	ser.write(intro)
+	for i in intro:
+		print(struct.pack('>B', i))
+		ser.write(struct.pack('>B', i))
 
 	# Type
-	ser.write(0x01)
+	print(b'\x01')
+	ser.write(b'\x01')
 	
 	# Message
 	data = b''
@@ -57,7 +60,7 @@ def send_default_packet():
 
 	# fill in the rest of the 32 bytes
 	for i in range(0, 32 - len(data)):
-		data += 0x00
+		data += b'\x00'
 	
 	print(data)
 	ser.write(data)
@@ -67,10 +70,14 @@ def send_default_packet():
 	for i in data:
 		checksum += i
 
-	ser.write(checksum)
+	checksum = checksum % 256
+	print(struct.pack('>B', checksum))
+	ser.write(struct.pack('>B', checksum))
 
 	# Terminator
-	ser.write(terminator)
+	for i in terminator:
+		print(struct.pack('>B', i))
+		ser.write(struct.pack('>B', i))
 
 while True:
 	send_default_packet()
