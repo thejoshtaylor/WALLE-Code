@@ -34,11 +34,9 @@ def send_default_packet():
 
 	# Intro
 	for i in intro:
-		print(struct.pack('>B', i))
 		ser.write(struct.pack('>B', i))
 
 	# Type
-	print(b'\x01')
 	ser.write(b'\x01')
 	
 	def prep(val):
@@ -73,7 +71,6 @@ def send_default_packet():
 	for i in range(0, 32 - len(data)):
 		data += b'\x00'
 	
-	print(data)
 	ser.write(data)
 
 	# Checksum
@@ -82,19 +79,12 @@ def send_default_packet():
 		checksum += i
 
 	checksum = checksum % 256
-	print(struct.pack('>B', checksum))
 	ser.write(struct.pack('>B', checksum))
 
 	# Terminator
 	for i in terminator:
-		print(struct.pack('>B', i))
 		ser.write(struct.pack('>B', i))
-
-# while True:
-# 	send_default_packet()
-# 	sleep(0.001)
-# 	leftSpeed += 1
-# 	rightSpeed -= 1
+		
 
 drive_angle = 0
 drive_speed = 0
@@ -163,6 +153,8 @@ def update_drive(x=None, y=None):
 		# Linearly scale speed
 		rightSpeed = scale * drive_speed
 
+	print('Right', rightSpeed, 'Left', leftSpeed)
+
 	send_default_packet()
 
 class MyController(Controller):
@@ -171,27 +163,21 @@ class MyController(Controller):
 
 	# Left stick (tank drive)
 	def on_L3_up(self, value):
-		print('up', value)
-		update_drive(y=value)
+		update_drive(y=-value)
 	
 	def on_L3_down(self, value):
-		print('down', value)
-		update_drive(y=value)
+		update_drive(y=-value)
 	
 	def on_L3_left(self, value):
-		print('left', value)
 		update_drive(x=value)
 	
 	def on_L3_right(self, value):
-		print('right', value)
 		update_drive(x=value)
 	
 	def on_L3_x_at_rest(self, ):
-		print('x', 'at rest')
 		update_drive(x=0)
 		
 	def on_L3_y_at_rest(self, ):
-		print('y', 'at rest')
 		update_drive(y=0)
 	
 		
