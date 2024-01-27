@@ -116,7 +116,7 @@ def update_drive(x=None, y=None):
 			drive_angle = 3*pi/2
 	else:
 		drive_angle = atan(last_drive_y / last_drive_x)
-		
+
 	drive_speed = sqrt(last_drive_x * last_drive_x + last_drive_y * last_drive_y)
 
 	# Set left speed
@@ -163,21 +163,27 @@ class MyController(Controller):
 
 	# Left stick (tank drive)
 	def on_L3_up(self, value):
+		print('up', value)
 		update_drive(y=value)
 	
 	def on_L3_down(self, value):
+		print('down', value)
 		update_drive(y=value)
 	
 	def on_L3_left(self, value):
+		print('left', value)
 		update_drive(x=value)
 	
 	def on_L3_right(self, value):
+		print('right', value)
 		update_drive(x=value)
 	
 	def on_L3_x_at_rest(self, ):
+		print('x', 'at rest')
 		update_drive(s=value)
 		
 	def on_L3_y_at_rest(self, ):
+		print('y', 'at rest')
 		update_drive(y=value)
 	
 		
