@@ -41,23 +41,31 @@ def send_default_packet():
 	print(b'\x01')
 	ser.write(b'\x01')
 	
+	def prep(val):
+		temp = round(val)
+		if temp > 32767:
+			temp = 32767
+		elif temp < -32768:
+			temp = -32768
+		return temp
+
 	# Message
 	data = b''
 	# >h = big endian short
-	data += struct.pack('>h', leftSpeed)
-	data += struct.pack('>h', rightSpeed)
+	data += struct.pack('>h', prep(leftSpeed))
+	data += struct.pack('>h', prep(rightSpeed))
 
-	data += struct.pack('>h', leftArmLength)
-	data += struct.pack('>h', rightArmLength)
+	data += struct.pack('>h', prep(leftArmLength))
+	data += struct.pack('>h', prep(rightArmLength))
 
-	data += struct.pack('>h', leftArmAngle)
-	data += struct.pack('>h', rightArmAngle)
+	data += struct.pack('>h', prep(leftArmAngle))
+	data += struct.pack('>h', prep(rightArmAngle))
 
-	data += struct.pack('>h', leftWingAngle)
-	data += struct.pack('>h', rightWingAngle)
+	data += struct.pack('>h', prep(leftWingAngle))
+	data += struct.pack('>h', prep(rightWingAngle))
 
-	data += struct.pack('>h', leftHandAngle)
-	data += struct.pack('>h', rightHandAngle)
+	data += struct.pack('>h', prep(leftHandAngle))
+	data += struct.pack('>h', prep(rightHandAngle))
 
 	data += struct.pack('>B', bigFaceLatch)
 
