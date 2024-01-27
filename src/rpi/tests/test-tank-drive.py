@@ -188,11 +188,11 @@ class MyController(Controller):
 	
 	def on_L3_x_at_rest(self, ):
 		print('x', 'at rest')
-		update_drive(s=value)
+		update_drive(x=0)
 		
 	def on_L3_y_at_rest(self, ):
 		print('y', 'at rest')
-		update_drive(y=value)
+		update_drive(y=0)
 	
 		
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
