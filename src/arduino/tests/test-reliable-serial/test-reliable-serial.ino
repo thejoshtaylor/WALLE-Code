@@ -20,7 +20,7 @@ short rightWingAngle = 0;
 short leftHandAngle = 0;
 short rightHandAngle = 0;
 
-bool bigFaceLatch = false;
+bool bigFaceLatch = true;
 
 // Introductory message
 char intro[] = {0x55, 0x4f, 0x02, 0x39, 0x81, 0xc4};
@@ -60,7 +60,7 @@ void loop() // run over and over
       if (Serial1.read() == intro[status])
         status++;
       else
-        status = 0;
+        status = 255;
     }
     // 6: Type
     else if (status == 6)
@@ -87,11 +87,9 @@ void loop() // run over and over
       
       // Checksum is incorrect
       if (sum != checksum)
-      {
         status = 255;
-      }
-
-      status++;
+      else
+        status++;
     }
     // 40-45: Terminator
     else if (status >= 40 && status < 46)
@@ -151,7 +149,7 @@ void loop() // run over and over
       leftHandAngle = 0;
       rightHandAngle = 0;
 
-      bigFaceLatch = false;
+      bigFaceLatch = true;
 
       // Reset status
       Serial.println("Bad message");
