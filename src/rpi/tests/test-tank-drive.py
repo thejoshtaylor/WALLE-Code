@@ -2,6 +2,7 @@ from pyPS4Controller.controller import Controller
 import serial
 from time import sleep
 import struct
+import math
 
 ser = serial.Serial("/dev/ttyS0", 115200)
 
@@ -108,8 +109,8 @@ def update_drive(x=None, y=None):
 	if y is not None:
 		last_drive_y = y
 
-	drive_angle = atan(last_drive_y / last_drive_x)
-	drive_speed = sqrt(last_drive_x * last_drive_x + last_drive_y * last_drive_y)
+	drive_angle = math.atan(last_drive_y / last_drive_x)
+	drive_speed = math.sqrt(last_drive_x * last_drive_x + last_drive_y * last_drive_y)
 
 	# Set left speed
 	if drive_angle >= 0 and drive_angle <= pi / 2:
