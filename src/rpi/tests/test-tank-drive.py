@@ -103,7 +103,7 @@ def update_drive(x, y):
 	else:
 		# Get the angle between zero and 2pi
 		drive_angle = atan2(last_drive_y, last_drive_x)
-		if last_drive_x < 0:
+		if drive_angle < 0:
 			drive_angle += 2*pi
 
 	drive_speed = sqrt(last_drive_x * last_drive_x + last_drive_y * last_drive_y)
