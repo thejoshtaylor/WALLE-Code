@@ -86,19 +86,7 @@ def send_default_packet():
 		ser.write(struct.pack('>B', i))
 		
 
-drive_angle = 0
-drive_speed = 0
-
-last_drive_x = 0
-last_drive_y = 0
-
-def update_drive(x=None, y=None):
-	global drive_angle
-	global drive_speed
-
-	global last_drive_x
-	global last_drive_y
-
+def update_drive(x, y):
 	global leftSpeed
 	global rightSpeed
 
@@ -153,32 +141,40 @@ def update_drive(x=None, y=None):
 		# Linearly scale speed
 		rightSpeed = scale * drive_speed
 
-	print('Right', rightSpeed, 'Left', leftSpeed)
+	print('Angle', drive_angle, 'Speed', drive_speed, 'Right', rightSpeed, 'Left', leftSpeed)
 
 	send_default_packet()
 
 class MyController(Controller):
 	def __init__(self, **kwargs):
 		Controller.__init__(self, **kwargs)
+		self.last_drive_x = 0
+		self.last_drive_y = 0
 
 	# Left stick (tank drive)
 	def on_L3_up(self, value):
-		update_drive(y=-value)
+		self.last_drive_y = -value
+		update_drive(x=self.last_drive_x, y=-value)
 	
 	def on_L3_down(self, value):
-		update_drive(y=-value)
+		self.last_drive_y = -value
+		update_drive(x=self.last_drive_x, y=-value)
 	
 	def on_L3_left(self, value):
-		update_drive(x=value)
+		self.last_drive_x = value
+		update_drive(x=value, y=self.last_drive_y)
 	
 	def on_L3_right(self, value):
-		update_drive(x=value)
+		self.last_drive_x = value
+		update_drive(x=value, y=self.last_drive_y)
 	
 	def on_L3_x_at_rest(self, ):
-		update_drive(x=0)
+		self.last_drive_x = 0
+		update_drive(x=0, y=self.last_drive_y)
 		
 	def on_L3_y_at_rest(self, ):
-		update_drive(y=0)
+		self.last_drive_y = 0
+		update_drive(x=self.last_drive_x, y=0)
 	
 		
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
