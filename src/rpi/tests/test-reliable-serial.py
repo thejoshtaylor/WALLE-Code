@@ -1,5 +1,6 @@
 import serial
 from time import sleep
+import struct
 
 ser = serial.Serial("/dev/ttyS0", 9600)
 

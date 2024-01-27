@@ -153,7 +153,7 @@ void loop() // run over and over
   }
 
   // Check for timeout
-  if (millis() - lastMessage > 1000)
+  if (millis() - lastMessage > 1000 && status != 0)
   {
     Serial.println("TIMEOUT");
     status = 255;
