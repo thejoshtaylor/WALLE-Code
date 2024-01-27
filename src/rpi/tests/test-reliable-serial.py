@@ -2,7 +2,7 @@ import serial
 from time import sleep
 import struct
 
-ser = serial.Serial("/dev/ttyS0", 9600)
+ser = serial.Serial("/dev/ttyS0", 115200)
 
 
 
@@ -82,6 +82,6 @@ def send_default_packet():
 
 while True:
 	send_default_packet()
-	sleep(0.1)
+	sleep(0.001)
 	leftSpeed += 1
 	rightSpeed -= 1
