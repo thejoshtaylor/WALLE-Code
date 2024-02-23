@@ -52,7 +52,7 @@ void setup()
 { 
   Serial.begin(9600);
 
-  myservo.attach(LINEAR_ACTUATOR_PIN);  // attaches the servo on the pin to the servo object 
+  myservo.attach(SERVO_PIN);  // attaches the servo on the pin to the servo object 
 
   pinMode(POT_PIN, INPUT);
 

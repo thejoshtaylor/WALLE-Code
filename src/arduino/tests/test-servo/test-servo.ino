@@ -24,32 +24,31 @@
   This example code is in the public domain.
 */ 
 
-#define LINEAR_ACTUATOR_PIN 33
+#define SERVO_PIN 37
 
 #include <Servo.h>  
 Servo myservo;  // create servo object to control a servo 
                 // twelve servo objects can be created on most boards
  
-int pos = 0;    // variable to store the servo position 
- 
-void setup() 
-{ 
-  myservo.attach(SERVO_PIN);  // attaches the servo on the pin to the servo object 
-} 
- 
-void loop() 
-{ 
- 
-    myservo.writeMicroseconds(1500); // stop signal
-    delay(1000);  //1 second
-    
-    myservo.writeMicroseconds(1600); // full speed forwards signal
-    delay(2000); //2 seconds  
-    
-    myservo.writeMicroseconds(1500); // stop signal
-    delay(1000);  // 1 second
-    
-    myservo.writeMicroseconds(1400); // full speed reverse signal
-    delay(2000); //2 seconds   
+int pos = 0;    // variable to store the servo position
 
+ 
+void setup()
+{ 
+  Serial.begin(9600);
+
+  myservo.attach(SERVO_PIN);  // attaches the servo on the pin to the servo object
+}
+
+void loop() 
+{
+  for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+  for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
 }

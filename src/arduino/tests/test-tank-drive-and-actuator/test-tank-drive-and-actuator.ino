@@ -88,11 +88,11 @@ void setup() {
 
   // Linear actuator
     
-  myservo.attach(LINEAR_ACTUATOR_PIN);  // attaches the servo on the pin to the servo object 
+  myservo.attach(SERVO_PIN);  // attaches the servo on the pin to the servo object 
 
   pinMode(POT_PIN, INPUT);
 
-  myPID.setTimeStep(1);
+  myPID.setTimeStep(50);
   // myPID.setBangBang(1.5);
   target = 0;
   
@@ -213,7 +213,9 @@ void loop() // run over and over
         leftArmLength = (data[4] << 8) | data[5];
 
         target = mapfloat(leftArmLength, -32768, 32767, 0.0, 18.0);
-        Serial.println(target);
+        Serial.print(target);
+        Serial.print("\t");
+        Serial.println(position);
 
         rightArmLength = (data[6] << 8) | data[7];
 

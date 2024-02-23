@@ -54,7 +54,7 @@ void loop()
     servo.writeMicroseconds(1500 + i);
     delay(DELAY_PER_STEP);
   }
-  delay(1000);
+  delay(5000);
 
   // Go back to zero
   for (int i = -MAX_VALUE; i <= 0; i++)
@@ -62,5 +62,4 @@ void loop()
     servo.writeMicroseconds(1500 + i);
     delay(DELAY_PER_STEP);
   }
-  delay(1000);
 }
