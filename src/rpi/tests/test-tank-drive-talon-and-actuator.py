@@ -230,7 +230,6 @@ class MyController(Controller):
 		self.last_drive_x = 0
 		self.last_drive_y = 0
 
-	
 
 	# Left stick (tank drive)
 	def on_L3_up(self, value):
@@ -257,7 +256,24 @@ class MyController(Controller):
 		self.last_drive_y = 0
 		update_drive(x=self.last_drive_x, y=0)
 
-	# Right stick (arm control)
+	# Right stick (arm elevation)
+	def on_R3_up(self, value):
+		global leftArmAngle
+		leftArmAngle = value
+		send_default_packet()
+
+	def on_R3_down(self, value):
+		global leftArmAngle
+		leftArmAngle = value
+		send_default_packet()
+
+	def on_R3_y_at_rest(self, ):
+		global leftArmAngle
+		leftArmAngle = 0
+		send_default_packet()
+
+
+	# Right trigger (arm extension)
 	def on_R2_press(self, value):
 		global leftArmLength
 		leftArmLength = value

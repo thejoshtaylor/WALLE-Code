@@ -7,9 +7,13 @@
 #define LINEAR_ACTUATOR_PIN 28
 #define POT_PIN 14
 
+#define LINEAR_ACTUATOR_PIN_2 29
+#define POT_PIN_2 15
+
 #include <AutoPID.h>
 #include <Servo.h>
 Servo actuatorServo;
+Servo actuatorServo2;
 Servo talonServo;
 
 // Pin definitions
@@ -90,6 +94,7 @@ void setup()
 
   // Linear actuator
   actuatorServo.attach(LINEAR_ACTUATOR_PIN);
+  actuatorServo2.attach(LINEAR_ACTUATOR_PIN_2);
 
   pinMode(POT_PIN, INPUT);
 
@@ -248,15 +253,20 @@ void loop() // run over and over
         int doubleCheck = (data[0] << 24) | (data[8] << 16) | (data[3] << 8) | data[19];
         if (doubleCheck == 0xdeadbeef)
         {
-          int speed = (data[4] << 8) | data[5];
+          short speed = (data[4] << 8) | data[5];
+          Serial.print(speed);
+          Serial.print("\t");
 
           // 0 means backwards, 1 means forwards
           int direction = data[6];
+          Serial.print(direction);
+          Serial.print("\t");
 
           // Validate message
           if (speed < -32768 || speed > 32767 || direction < 0 || direction > 1)
           {
             Serial.println("BAD SHREDDER MESSAGE (2)");
+            talonServo.write(1500);
           }
           else
           {
@@ -272,6 +282,7 @@ void loop() // run over and over
         else
         {
           Serial.println("BAD SHREDDER MESSAGE");
+          talonServo.write(1500);
         }
       }
 
@@ -315,6 +326,9 @@ void loop() // run over and over
     Serial.println("BAD MESSAGE");
     status = 0;
   }
+
+  int angleSpeed = map(leftArmAngle, -32768, 32767, 500, -500);
+  actuatorServo2.writeMicroseconds(angleSpeed + 1500);
 
   digitalWrite(DIR1, leftSpeed >= 0);
   digitalWrite(DIR2, rightSpeed >= 0);
