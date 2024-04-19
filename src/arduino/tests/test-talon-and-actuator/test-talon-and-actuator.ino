@@ -130,7 +130,7 @@ void loop() // run over and over
   if (fabs(moveSpeed) < 10)
     moveSpeed = 0;
 
-  actuatorServo.writeMicroseconds(-moveSpeed + 1500); // stop signal
+  actuatorServo.writeMicroseconds(moveSpeed + 1500); // stop signal
 
   // Get message from rpi
   if (Serial1.available())
@@ -222,7 +222,9 @@ void loop() // run over and over
         target = mapfloat(leftArmLength, -32768, 32767, 0.0, 18.0);
         Serial.print(target);
         Serial.print("\t");
-        Serial.println(position);
+        Serial.print(position);
+        Serial.print("\t");
+        Serial.println(moveSpeed);
 
         rightArmLength = (data[6] << 8) | data[7];
 

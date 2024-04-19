@@ -112,7 +112,13 @@ def send_shredder_packet():
 	data = b''
 
 	# Insert double check 0xdeadbeef
-	data += struct.pack('>I', 0xdeadbeef)
+	data += struct.pack('>B', 0xde)
+	# one and two are empty
+	for i in range(0, 2):
+		data += struct.pack('>B', 0x00)
+	# three is be
+	data += struct.pack('>B', 0xbe)
+	# four and five are the shredder value
 	
 	# Make sure we're good to go
 	if shredder_good and shredder_running:
@@ -120,7 +126,20 @@ def send_shredder_packet():
 	else:
 		data += struct.pack('>h', -32768)
 
+	# six is the direction
 	data += struct.pack('>B', shredder_direction)
+
+	# seven is empty
+	for i in range(6, 7):
+		data += struct.pack('>B', 0x00)
+	# eight is ad
+	data += struct.pack('>B', 0xad)
+	# nine through eighteen are empty
+	for i in range(8, 18):
+		data += struct.pack('>B', 0x00)
+	# nineteen is ef
+	data += struct.pack('>B', 0xef)
+
 
 	# fill in the rest of the 32 bytes
 	for i in range(0, 32 - len(data)):
