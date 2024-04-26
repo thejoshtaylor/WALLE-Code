@@ -271,7 +271,7 @@ void loop() // run over and over
           else
           {
 
-            int signal = map(speed, -32768, 32767, 0, 100);
+            int signal = map(speed, -32768, 32767, 0, 500);
 
             signal = direction == 0 ? 1500 - signal : 1500 + signal;
 
@@ -327,7 +327,7 @@ void loop() // run over and over
     status = 0;
   }
 
-  int angleSpeed = map(leftArmAngle, -32768, 32767, 500, -500);
+  int angleSpeed = map(leftArmAngle, -32768, 32767, -500, 500);
   actuatorServo2.writeMicroseconds(angleSpeed + 1500);
 
   digitalWrite(DIR1, leftSpeed >= 0);
