@@ -27,13 +27,21 @@ VERSION = "0.0.1"
 START_FILE = "tests/test-tank-drive-talon-and-actuator.py"
 
 # Logging
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+# create logger
 log = logging.getLogger("main")
 log.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 # log to rotating files
 handler = logging.handlers.RotatingFileHandler("logs/main.log", maxBytes=1000000, backupCount=5)
 handler.setFormatter(formatter)
+# log to stdout
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(formatter)
+# add handlers
 log.addHandler(handler)
+log.addHandler(consoleHandler)
 
 # Main process variable
 mainProcess = None
@@ -62,7 +70,7 @@ def update():
             log.info("Updates available")
             # Turn on the RPI LED
             log.debug("Turning on LED")
-            output = subprocess.check_output("echo 1 | sudo tee /sys/class/leds/led0/brightness", shell=True)
+            output = subprocess.check_output("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
             log.debug(output)
             # pull updates
             log.debug("Running `git pull`")
@@ -116,7 +124,7 @@ def restart():
 def main():
     # Turn off the RPI LED
     log.debug("Turning off LED")
-    output = subprocess.check_output("echo 0 | sudo tee /sys/class/leds/led0/brightness", shell=True)
+    output = subprocess.check_output("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
     log.debug(output)
 
     # Start the main program
