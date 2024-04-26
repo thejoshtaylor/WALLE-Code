@@ -137,13 +137,13 @@ void loop() // run over and over
       // Handle the message
       if (type == 1)
       {
-        Serial.print("GOT MESSAGE\t");
-        // Normal operation
-        leftSpeed = (data[0] << 8) | data[1];
-        Serial.print(leftSpeed);
-        Serial.print("\t");
-        rightSpeed = (data[2] << 8) | data[3];
-        Serial.println(rightSpeed);
+        // Serial.print("GOT MESSAGE\t");
+        // // Normal operation
+        // leftSpeed = (data[0] << 8) | data[1];
+        // Serial.print(leftSpeed);
+        // Serial.print("\t");
+        // rightSpeed = (data[2] << 8) | data[3];
+        // Serial.println(rightSpeed);
 
         leftArmLength = (data[4] << 8) | data[5];
         rightArmLength = (data[6] << 8) | data[7];
@@ -176,8 +176,8 @@ void loop() // run over and over
   if (status == 255)
   {
     // Set all values to zero
-    leftSpeed = 0;
-    rightSpeed = 0;
+    // leftSpeed = 0;
+    // rightSpeed = 0;
 
     leftArmLength = 0;
     rightArmLength = 0;
@@ -198,9 +198,15 @@ void loop() // run over and over
     status = 0;
   }
 
+  // Cycle through left and right speeds
+  leftSpeed = (leftSpeed + 1);
+  rightSpeed = (rightSpeed - 1);
+
   digitalWrite(DIR1, leftSpeed >= 0);
   digitalWrite(DIR2, rightSpeed >= 0);
 
   analogWrite(PWM1, map(abs(leftSpeed), 0, 32678, 0, 255));
   analogWrite(PWM2, map(abs(rightSpeed), 0, 32678, 0, 255));
+
+  delayMicroseconds(100);
 }
