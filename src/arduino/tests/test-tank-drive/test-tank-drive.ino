@@ -5,11 +5,10 @@
 // Designed for Teensy 4.1
 
 // Pin definitions
-#define DIR1 22
-#define PWM1 23
-#define DIR2 14
-#define PWM2 15
-
+#define DIR1 20
+#define PWM1 18
+#define DIR2 21
+#define PWM2 19
 // All variables that we're going to receive from the RPi
 short leftSpeed = 0;
 short rightSpeed = 0;
@@ -25,6 +24,9 @@ short rightWingAngle = 0;
 
 short leftHandAngle = 0;
 short rightHandAngle = 0;
+
+int leftChange = 1;
+int rightChange = -1;
 
 bool bigFaceLatch = true;
 
@@ -199,8 +201,13 @@ void loop() // run over and over
   }
 
   // Cycle through left and right speeds
-  leftSpeed = (leftSpeed + 1);
-  rightSpeed = (rightSpeed - 1);
+  leftSpeed = (leftSpeed + leftChange);
+  rightSpeed = (rightSpeed + rightChange);
+
+  if (leftSpeed == 20000 || leftSpeed == -20000)
+    leftChange = -leftChange;
+  if (rightSpeed == 20000 || rightSpeed == -20000)
+    rightChange = -rightChange;
 
   digitalWrite(DIR1, leftSpeed >= 0);
   digitalWrite(DIR2, rightSpeed >= 0);
@@ -208,5 +215,5 @@ void loop() // run over and over
   analogWrite(PWM1, map(abs(leftSpeed), 0, 32678, 0, 255));
   analogWrite(PWM2, map(abs(rightSpeed), 0, 32678, 0, 255));
 
-  delayMicroseconds(100);
+  delayMicroseconds(50);
 }
