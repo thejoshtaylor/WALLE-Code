@@ -18,14 +18,14 @@ r2 = 0
 l2 = 0
 
 pid_objects = {
-    'l3_vert': PID(-0.99, 0.001, 0.1),
-    'l3_horz': PID(-0.99, 0.001, 0.1),
+    'l3_vert': PID(-0.99, 0.001, 0.01),
+    'l3_horz': PID(-0.99, 0.001, 0.01),
 
-    'r3_vert': PID(-0.99, 0.001, 0.1),
-    'r3_horz': PID(-0.99, 0.001, 0.1),
+    'r3_vert': PID(-0.99, 0.001, 0.01),
+    'r3_horz': PID(-0.99, 0.001, 0.01),
 
-    'r2': PID(-0.99, 0.001, 0.1),
-    'l2': PID(-0.99, 0.001, 0.1),
+    'r2': PID(-0.99, 0.001, 0.01),
+    'l2': PID(-0.99, 0.001, 0.01),
 }
 
 def printTable():
@@ -127,7 +127,7 @@ class MyController(Controller):
 
 	def on_R2_release(self, ):
 		global r2_pre
-		r2_pre = 0
+		r2_pre = -32768
 
 	# Left stick (shredder control [TEMPORARY])
 	def on_L2_press(self, value):
@@ -136,7 +136,7 @@ class MyController(Controller):
 
 	def on_L2_release(self, ):
 		global l2_pre
-		l2_pre = 0
+		l2_pre = -32768
 		
 
 print()
