@@ -51,7 +51,7 @@ def updatePIDs():
 
     for key in pid_objects:
         pid_objects[key].pop(0)
-        pid_objects[key].append(locals()[key + '_pre'])
+        pid_objects[key].append(globals()[key + '_pre'])
 		
     l3_vert = statistics.fmean(pid_objects['l3_vert'])
     l3_horz = statistics.fmean(pid_objects['l3_horz'])
