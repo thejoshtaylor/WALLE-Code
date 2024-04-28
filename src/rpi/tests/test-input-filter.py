@@ -37,7 +37,7 @@ def printTable():
     print('|', '-'*10, '|', '-'*10, '|', '-'*10, '|', '-'*10, '|', '-'*10, '|', '-'*10, '|', '-'*10, '|', sep='-')
 	
 def retractCursor():
-    for i in range(0, 5):
+    for i in range(0, 6):
         print("\033[A                             \033[A")
 
 def updatePIDs():
