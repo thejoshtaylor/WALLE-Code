@@ -67,7 +67,7 @@ def threadPrint():
     while True:
         updatePIDs()
         printTable()
-        time.sleep(0.02)
+        time.sleep(0.04)
         retractCursor()
 
 class MyController(Controller):
