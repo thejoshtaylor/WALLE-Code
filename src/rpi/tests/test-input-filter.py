@@ -51,7 +51,10 @@ def updatePIDs():
 
     for key in pid_objects:
         pid_objects[key].pop(0)
-        pid_objects[key].append(globals()[key + '_pre'])
+        value = globals()[key + '_pre']
+        if abs(value) < 800:
+            value = 0
+        pid_objects[key].append(value)
 		
     l3_vert = statistics.fmean(pid_objects['l3_vert'])
     l3_horz = statistics.fmean(pid_objects['l3_horz'])
@@ -64,7 +67,7 @@ def threadPrint():
     while True:
         updatePIDs()
         printTable()
-        time.sleep(0.1)
+        time.sleep(0.01)
         retractCursor()
 
 class MyController(Controller):
