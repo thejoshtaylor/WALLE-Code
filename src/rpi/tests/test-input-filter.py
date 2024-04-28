@@ -1,31 +1,35 @@
 from pyPS4Controller.controller import Controller
 from simple_pid import PID
 
+import statistics
 import time
+
+# CONSTANT variables
+AVG_POINTS = 10
 
 l3_vert_pre = 0
 l3_horz_pre = 0
 r3_vert_pre = 0
 r3_horz_pre = 0
-r2_pre = 0
-l2_pre = 0
+r2_pre = -32768
+l2_pre = -32768
 
 l3_vert = 0
 l3_horz = 0
 r3_vert = 0
 r3_horz = 0
-r2 = 0
-l2 = 0
+r2 = -32768
+l2 = -32768
 
 pid_objects = {
-    'l3_vert': PID(0.99, 0.01, 0.001),
-    'l3_horz': PID(0.99, 0.01, 0.001),
+    'l3_vert': [l3_vert_pre] * AVG_POINTS,
+    'l3_horz': [l3_horz_pre] * AVG_POINTS,
 
-    'r3_vert': PID(0.99, 0.01, 0.001),
-    'r3_horz': PID(0.99, 0.01, 0.001),
+    'r3_vert': [r3_vert_pre] * AVG_POINTS,
+    'r3_horz': [r3_horz_pre] * AVG_POINTS,
 
-    'r2': PID(0.99, 0.01, 0.001),
-    'l2': PID(0.99, 0.01, 0.001),
+    'r2': [r2_pre] * AVG_POINTS,
+    'l2': [l2_pre] * AVG_POINTS,
 }
 
 def printTable():
@@ -43,13 +47,18 @@ def retractCursor():
 def updatePIDs():
     global l3_vert_pre, l3_horz_pre, r3_vert_pre, r3_horz_pre, r2_pre, l2_pre
     global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2
+    global pid_objects
 
-    l3_vert = -pid_objects['l3_vert'](l3_vert_pre)
-    l3_horz = -pid_objects['l3_horz'](l3_horz_pre)
-    r3_vert = -pid_objects['r3_vert'](r3_vert_pre)
-    r3_horz = -pid_objects['r3_horz'](r3_horz_pre)
-    r2 = -pid_objects['r2'](r2_pre)
-    l2 = -pid_objects['l2'](l2_pre)
+    for key in pid_objects:
+        pid_objects[key].pop(0)
+        pid_objects[key].append(locals()[key + '_pre'])
+		
+    l3_vert = statistics.fmean(pid_objects['l3_vert'])
+    l3_horz = statistics.fmean(pid_objects['l3_horz'])
+    r3_vert = statistics.fmean(pid_objects['r3_vert'])
+    r3_horz = statistics.fmean(pid_objects['r3_horz'])
+    r2 = statistics.fmean(pid_objects['r2'])
+    l2 = statistics.fmean(pid_objects['l2'])
 	
 def threadPrint():
     while True:
