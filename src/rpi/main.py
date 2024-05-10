@@ -95,7 +95,6 @@ def start():
     log.info("Starting program")
     try:
         # Start the main program as a different process but keep track of it
-        log.debug("Starting program")
         mainProcess = subprocess.Popen(["python3", START_FILE])
         log.debug("Started program")
     except:
