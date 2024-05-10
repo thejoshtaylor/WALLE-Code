@@ -50,6 +50,7 @@ mainProcess = None
 def update():
     # Check for internet connection
     try:
+        log.info("Checking for internet connection")
         socket.create_connection(("www.google.com", 80))
     except OSError:
         log.info("No internet connection")
@@ -84,7 +85,7 @@ def update():
 
 def start():
     global mainProcess
-    if mainProcess is not None:
+    if mainProcess is not None and mainProcess.poll() is not None:
         log.info("Program already running")
         return
     

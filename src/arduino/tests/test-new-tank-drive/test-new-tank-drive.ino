@@ -15,7 +15,7 @@
 
 #define DELAY_PER_STEP MS_PER_CYCLE / (MAX_VALUE * 4)
 
-#include <Servo.h>  
+#include <Servo.h>
 Servo drive1;
 Servo drive2;
 

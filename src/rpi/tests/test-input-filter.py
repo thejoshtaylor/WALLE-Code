@@ -1,5 +1,4 @@
 from pyPS4Controller.controller import Controller
-from simple_pid import PID
 
 import statistics
 import time
@@ -21,7 +20,7 @@ r3_horz = 0
 r2 = -32768
 l2 = -32768
 
-pid_objects = {
+filter_objects = {
     'l3_vert': [l3_vert_pre] * AVG_POINTS,
     'l3_horz': [l3_horz_pre] * AVG_POINTS,
 
@@ -47,21 +46,21 @@ def retractCursor():
 def updatePIDs():
     global l3_vert_pre, l3_horz_pre, r3_vert_pre, r3_horz_pre, r2_pre, l2_pre
     global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2
-    global pid_objects
+    global filter_objects
 
-    for key in pid_objects:
-        pid_objects[key].pop(0)
+    for key in filter_objects:
+        filter_objects[key].pop(0)
         value = globals()[key + '_pre']
         if abs(value) < 800:
             value = 0
-        pid_objects[key].append(value)
+        filter_objects[key].append(value)
 		
-    l3_vert = statistics.fmean(pid_objects['l3_vert'])
-    l3_horz = statistics.fmean(pid_objects['l3_horz'])
-    r3_vert = statistics.fmean(pid_objects['r3_vert'])
-    r3_horz = statistics.fmean(pid_objects['r3_horz'])
-    r2 = statistics.fmean(pid_objects['r2'])
-    l2 = statistics.fmean(pid_objects['l2'])
+    l3_vert = statistics.fmean(filter_objects['l3_vert'])
+    l3_horz = statistics.fmean(filter_objects['l3_horz'])
+    r3_vert = statistics.fmean(filter_objects['r3_vert'])
+    r3_horz = statistics.fmean(filter_objects['r3_horz'])
+    r2 = statistics.fmean(filter_objects['r2'])
+    l2 = statistics.fmean(filter_objects['l2'])
 	
 def threadPrint():
     while True:
