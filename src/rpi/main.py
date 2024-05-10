@@ -146,7 +146,7 @@ def main():
 
         # Check if the main program is still running
         if mainProcess.poll() is not None:
-            log.error("Program crashed with error code " + mainProcess.poll())
+            log.error("Program crashed with error code: " + str(mainProcess.poll()))
             # Restart the main program
             start()
 
