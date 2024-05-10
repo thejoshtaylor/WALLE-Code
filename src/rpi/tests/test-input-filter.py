@@ -70,6 +70,7 @@ def threadPrint():
         time.sleep(0.03)
         retractCursor()
 
+# PS4 Controller class
 class MyController(Controller):
 	def __init__(self, **kwargs):
 		Controller.__init__(self, **kwargs)
