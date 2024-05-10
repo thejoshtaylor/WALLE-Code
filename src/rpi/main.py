@@ -79,6 +79,8 @@ def update():
             log.debug(output)
             # restart program
             restart()
+        else:
+            log.info("No updates available")
 
     except:
         log.error("Error checking for updates")
