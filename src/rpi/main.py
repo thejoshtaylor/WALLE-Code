@@ -87,9 +87,9 @@ def update():
 
 def start():
     global mainProcess
-    if mainProcess is not None and mainProcess.poll() is not None:
+    if mainProcess is not None and mainProcess.poll() is None:
         log.info("Program already running")
-        log.debug(mainProcess.poll())
+        log.debug(mainProcess())
         return
     
     log.info("Starting program")
