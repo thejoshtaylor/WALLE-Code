@@ -61,7 +61,8 @@ def updatePIDs():
     r3_horz = statistics.fmean(filter_objects['r3_horz'])
     r2 = statistics.fmean(filter_objects['r2'])
     l2 = statistics.fmean(filter_objects['l2'])
-	
+
+# Update PIDs on a regular interval
 def threadPrint():
     while True:
         updatePIDs()
