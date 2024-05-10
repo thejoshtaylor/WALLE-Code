@@ -67,7 +67,7 @@ def update():
         log.debug("Running `git status`")
         output = subprocess.check_output("git status", shell=True)
         log.debug(output)
-        if "Your branch is behind" in output:
+        if b"Your branch is behind" in output:
             log.info("Updates available")
             # Turn on the RPI LED
             log.debug("Turning on LED")
