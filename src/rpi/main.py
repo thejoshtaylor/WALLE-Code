@@ -91,7 +91,6 @@ def start():
     global mainProcess
     if mainProcess is not None and mainProcess.poll() is None:
         log.info("Program already running")
-        log.debug(mainProcess())
         return
     
     log.info("Starting program")
@@ -100,7 +99,8 @@ def start():
     log.debug("cmd: python3 " + START_FILE)
     try:
         # Start the main program as a different process but keep track of it
-        mainProcess = subprocess.Popen(["python3", START_FILE], cwd=os.path.dirname(os.path.realpath(__file__)) + "/", stdout="logs/subprocess.log", stderr=subprocess.STDOUT)
+        subLog = open("logs/main-sub.log", "w")
+        mainProcess = subprocess.Popen(["python3", START_FILE], cwd=os.path.dirname(os.path.realpath(__file__)) + "/", stdout=subLog, stderr=subprocess.STDOUT)
         log.debug("Started program")
     except Exception as e:
         log.error("Error starting program")
