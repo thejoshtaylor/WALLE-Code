@@ -83,8 +83,9 @@ def update():
         else:
             log.info("No updates available")
 
-    except:
+    except Exception as e:
         log.error("Error checking for updates")
+        log.error(e)
 
 def start():
     global mainProcess
