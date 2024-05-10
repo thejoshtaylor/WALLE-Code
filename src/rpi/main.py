@@ -95,12 +95,15 @@ def start():
         return
     
     log.info("Starting program")
+    log.debug("directory", os.getcwd())
+    log.debug("python3", START_FILE)
     try:
         # Start the main program as a different process but keep track of it
         mainProcess = subprocess.Popen(["python3", START_FILE])
         log.debug("Started program")
-    except:
+    except Exception as e:
         log.error("Error starting program")
+        log.error(e)
     
 def stop():
     global mainProcess
@@ -143,8 +146,7 @@ def main():
 
         # Check if the main program is still running
         if mainProcess.poll() is not None:
-            log.error("Program crashed")
-            log.debug(mainProcess.poll())
+            log.error("Program crashed with error code " + mainProcess.poll())
             # Restart the main program
             start()
 
