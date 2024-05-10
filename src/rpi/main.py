@@ -62,21 +62,21 @@ def update():
     try:
         # run git command and get output
         log.debug("Running `git remote -v update`")
-        output = subprocess.check_output("git remote update", shell=True)
+        output = subprocess.check_output("git remote update", shell=True, cwd=os.path.dirname(os.path.realpath(__file__)) + "/", stderr=subprocess.STDOUT)
         log.debug(output)
         # check if there are updates
         log.debug("Running `git status`")
-        output = subprocess.check_output("git status", shell=True)
+        output = subprocess.check_output("git status", shell=True, cwd=os.path.dirname(os.path.realpath(__file__)) + "/", stderr=subprocess.STDOUT)
         log.debug(output)
         if b"Your branch is behind" in output:
             log.info("Updates available")
             # Turn on the RPI LED
             log.debug("Turning on LED")
-            output = subprocess.check_output("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
+            output = subprocess.check_output("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True, stderr=subprocess.STDOUT)
             log.debug(output)
             # pull updates
             log.debug("Running `git pull`")
-            output = subprocess.check_output("git pull", shell=True)
+            output = subprocess.check_output("git pull", shell=True, cwd=os.path.dirname(os.path.realpath(__file__)) + "/", stderr=subprocess.STDOUT)
             log.debug(output)
             # restart program
             restart()
@@ -96,10 +96,11 @@ def start():
     
     log.info("Starting program")
     log.debug("cwd: " + os.getcwd())
+    log.debug("pwd: " + os.path.dirname(os.path.realpath(__file__)) + "/")
     log.debug("cmd: python3 " + START_FILE)
     try:
         # Start the main program as a different process but keep track of it
-        mainProcess = subprocess.Popen(["python3", START_FILE])
+        mainProcess = subprocess.Popen(["python3", START_FILE], cwd=os.path.dirname(os.path.realpath(__file__)) + "/", stdout="logs/subprocess.log", stderr=subprocess.STDOUT)
         log.debug("Started program")
     except Exception as e:
         log.error("Error starting program")
