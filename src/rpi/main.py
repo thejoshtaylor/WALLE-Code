@@ -50,7 +50,7 @@ mainProcess = None
 def update():
     # Check for internet connection
     try:
-        log.info("Checking for internet connection")
+        log.debug("Checking for internet connection")
         socket.create_connection(("www.google.com", 80))
     except OSError:
         log.info("No internet connection")
@@ -89,6 +89,7 @@ def start():
     global mainProcess
     if mainProcess is not None and mainProcess.poll() is not None:
         log.info("Program already running")
+        log.debug(mainProcess.poll())
         return
     
     log.info("Starting program")
@@ -152,11 +153,12 @@ if __name__ == "__main__":
     # Main loop
     try:
         main()
-    except KeyboardInterrupt:
+    except KeyboardInterrupt as e:
         log.info("Keyboard interrupt")
         stop()
         sys.exit(0)
-    except:
-        log.error("Main program crashed")
+    except Exception as e:
+        log.fatal("Main program crashed")
+        log.error(e)
         stop()
         sys.exit(1)
