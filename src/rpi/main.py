@@ -39,6 +39,7 @@ handler.setFormatter(formatter)
 # log to stdout
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(formatter)
+consoleHandler.setLevel(logging.INFO)
 # add handlers
 log.addHandler(handler)
 log.addHandler(consoleHandler)
