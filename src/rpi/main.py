@@ -95,8 +95,8 @@ def start():
         return
     
     log.info("Starting program")
-    log.debug("directory", os.getcwd())
-    log.debug("python3", START_FILE)
+    log.debug("cwd: " + os.getcwd())
+    log.debug("cmd: python3 " + START_FILE)
     try:
         # Start the main program as a different process but keep track of it
         mainProcess = subprocess.Popen(["python3", START_FILE])
