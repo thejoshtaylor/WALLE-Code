@@ -143,7 +143,8 @@ def main():
 
         # Check if the main program is still running
         if mainProcess.poll() is not None:
-            log.error("Main program crashed")
+            log.error("Program crashed")
+            log.debug(mainProcess.poll())
             # Restart the main program
             start()
 
