@@ -102,7 +102,7 @@ def triggerUpdate():
 
 		
 # Update PIDs on a regular interval
-def threadPrint():
+def filterThread():
     while True:
         updateFilters()
         time.sleep(0.03)
@@ -501,6 +501,11 @@ class MyController(Controller):
 
 		send_shredder_packet()
 	
+
+# Start the thread
+import threading
+thread = threading.Thread(target=filterThread)
+thread.start()
 		
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 print(controller.listen(timeout=60))
