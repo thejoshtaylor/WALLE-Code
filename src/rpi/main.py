@@ -24,7 +24,7 @@ from datetime import datetime
 
 # Constants
 VERSION = "0.0.1"
-START_FILE = "tests/test-tank-drive-talon-and-actuator.py"
+START_FILE = "run-system.py"
 
 # Logging
 if not os.path.exists("logs"):
