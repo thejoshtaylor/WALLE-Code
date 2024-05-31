@@ -105,7 +105,7 @@ def triggerUpdate():
 def filterThread():
     while True:
         updateFilters()
-        time.sleep(0.03)
+        time.sleep(0.025)
 
 
 # Message variables
@@ -440,18 +440,18 @@ class MyController(Controller):
 
 		# if shredder_good:
 		# 	# shredder_value = value
-		# 	send_shredder_packet()
+		send_shredder_packet()
 
 	def on_L2_release(self, ):
 		global shredder_running
 		global shredder_value
 		shredder_running = False
-		# shredder_value = -32768
+		shredder_value = -32768
 		global l2_pre
 
 		l2_pre = -32768
 
-		# send_shredder_packet()
+		send_shredder_packet()
 
 	# X button (shredder good and forward)
 	def on_x_press(self, ):
