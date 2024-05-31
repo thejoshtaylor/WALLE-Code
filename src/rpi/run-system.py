@@ -93,11 +93,11 @@ def triggerUpdate():
 	# Left trigger (shredder control [TEMPORARY])
 	if l2 != l2_old:
 		if True:#shredder_good:
-			shredder_value = l2
+			pass#shredder_value = l2
 		else:
 			shredder_value = -32768
 
-		send_shredder_packet()
+		# send_shredder_packet()
 		l2_old = l2
 
 		
@@ -432,24 +432,24 @@ class MyController(Controller):
 		global shredder_good
 		global shredder_running
 		global shredder_value
-		global l2_pre
+		# global l2_pre
 
 		shredder_running = True
 
-		l2_pre = value
+		# l2_pre = value
 
-		# if shredder_good:
-		# 	# shredder_value = value
-		send_shredder_packet()
+		if shredder_good:
+			shredder_value = value
+			send_shredder_packet()
 
 	def on_L2_release(self, ):
 		global shredder_running
 		global shredder_value
 		shredder_running = False
 		shredder_value = -32768
-		global l2_pre
+		# global l2_pre
 
-		l2_pre = -32768
+		# l2_pre = -32768
 
 		send_shredder_packet()
 
