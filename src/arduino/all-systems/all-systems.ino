@@ -13,13 +13,13 @@
 #define L_FOREARM_ACTUATOR_PIN 28
 #define L_FOREARM_POT_PIN 14
 
-#define L_FOREARM_ACTUATOR_PIN_2 29
+#define L_ELEV_ACTUATOR_PIN 29
 #define L_ELEV_POT_PIN 15
 
 #define R_FOREARM_ACTUATOR_PIN 30
 #define R_FOREARM_POT_PIN 16
 
-#define R_FOREARM_ACTUATOR_PIN_2 31
+#define R_ELEV_ACTUATOR_PIN 31
 #define R_ELEV_POT_PIN 17
 
 // Tank drive
@@ -74,9 +74,6 @@ unsigned long lastMessage = 0;
 
 int pos = 0; // variable to store the servo position
 
-float minLen = 18.5;
-float maxLen = 0.5;
-
 #define OUTPUT_MIN -500
 #define OUTPUT_MAX 500
 #define KP 600
@@ -106,7 +103,7 @@ void setup()
 
   // Linear actuator
   actuatorServo.attach(L_FOREARM_ACTUATOR_PIN);
-  actuatorServo2.attach(L_FOREARM_ACTUATOR_PIN_2);
+  actuatorServo2.attach(L_ELEV_ACTUATOR_PIN);
 
   pinMode(L_FOREARM_POT_PIN, INPUT);
   pinMode(L_ELEV_POT_PIN, INPUT);
@@ -124,25 +121,16 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-float getLinearLength(int pin)
+float getLinearLength(int pin, float extent)
 {
   int potValue = analogRead(pin);
-  float len = mapfloat(potValue, 0, 1023, 0.0, 18.0);
-  if (len < minLen)
-  {
-    minLen = len;
-  }
-  if (len > maxLen)
-  {
-    maxLen = len;
-  }
+  float len = mapfloat(potValue, 0, 1023, 0.0, extent);
   return len;
 }
 
 void loop() // run over and over
 {
-  position = getLinearLength(L_FOREARM_POT_PIN);
-  // target = 12.0; // 9 inches
+  position = getLinearLength(L_FOREARM_POT_PIN, 18.0);
   myPID.run();
 
   if (fabs(moveSpeed) < 10)

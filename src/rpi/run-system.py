@@ -380,7 +380,7 @@ class MyController(Controller):
 		global r3_vert_pre
 		# global leftArmAngle
 		# leftArmAngle = value
-		r3_vert_pre = value
+		r3_vert_pre = -value
 		# send_default_packet()
 
 	def on_R3_y_at_rest(self, ):
