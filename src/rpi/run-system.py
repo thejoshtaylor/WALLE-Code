@@ -92,7 +92,7 @@ def triggerUpdate():
 
 	# Left trigger (shredder control [TEMPORARY])
 	if l2 != l2_old:
-		if shredder_good:
+		if True:#shredder_good:
 			shredder_value = l2
 		else:
 			shredder_value = -32768
@@ -221,7 +221,7 @@ def send_shredder_packet():
 	# four and five are the shredder value
 	
 	# Make sure we're good to go
-	if shredder_good and shredder_running:
+	if True:#shredder_good and shredder_running:
 		data += struct.pack('>h', shredder_value)
 	else:
 		data += struct.pack('>h', -32768)
