@@ -31,8 +31,10 @@
 #define TALON 36
 
 // Servo objects
-Servo actuatorServo;
-Servo actuatorServo2;
+Servo leftArmServo;
+Servo leftElevServo;
+Servo rightArmServo;
+Servo rightElevServo;
 Servo talonServo;
 
 // All variables that we're going to receive from the RPi
@@ -80,9 +82,13 @@ int pos = 0; // variable to store the servo position
 #define KI 0
 #define KD 10
 
-double position, target, moveSpeed;
+double currentLeftLength, leftTarget, leftMoveSpeed;
+double currentRightLength, rightTarget, rightMoveSpeed;
 
-AutoPID myPID(&position, &target, &moveSpeed, OUTPUT_MIN, OUTPUT_MAX, KP, KI, KD);
+AutoPID leftPID(&currentLeftLength, &leftTarget, &leftMoveSpeed, OUTPUT_MIN, OUTPUT_MAX, KP, KI, KD);
+AutoPID rightPID(&currentRightLength, &rightTarget, &rightMoveSpeed, OUTPUT_MIN, OUTPUT_MAX, KP, KI, KD);
+
+unsigned long lastHeartbeat = 0;
 
 void setup()
 {
@@ -102,15 +108,23 @@ void setup()
   digitalWrite(DIR2, LOW);
 
   // Linear actuator
-  actuatorServo.attach(L_FOREARM_ACTUATOR_PIN);
-  actuatorServo2.attach(L_ELEV_ACTUATOR_PIN);
+  leftArmServo.attach(L_FOREARM_ACTUATOR_PIN);
+  leftElevServo.attach(L_ELEV_ACTUATOR_PIN);
+  rightArmServo.attach(R_FOREARM_ACTUATOR_PIN);
+  rightElevServo.attach(R_ELEV_ACTUATOR_PIN);
 
   pinMode(L_FOREARM_POT_PIN, INPUT);
   pinMode(L_ELEV_POT_PIN, INPUT);
+  pinMode(R_FOREARM_POT_PIN, INPUT);
+  pinMode(R_ELEV_POT_PIN, INPUT);
 
-  myPID.setTimeStep(50);
-  // myPID.setBangBang(1.5);
-  target = 0;
+  leftPID.setTimeStep(50);
+  // leftPID.setBangBang(1.5);
+  leftTarget = 0;
+
+  rightPID.setTimeStep(50);
+  // rightPID.setBangBang(1.5);
+  rightTarget = 0;
 
   // Shredder
   talonServo.attach(TALON);
@@ -130,13 +144,26 @@ float getLinearLength(int pin, float extent)
 
 void loop() // run over and over
 {
-  position = getLinearLength(L_FOREARM_POT_PIN, 18.0);
-  myPID.run();
+  // Print heartbeat to serial every second
+  if (millis() - lastHeartbeat > 1000)
+  {
+    Serial.println("Heartbeat");
+    lastHeartbeat = millis();
+  }
 
-  if (fabs(moveSpeed) < 10)
-    moveSpeed = 0;
+  currentLeftLength = getLinearLength(L_FOREARM_POT_PIN, 18.0);
+  currentRightLength = getLinearLength(R_FOREARM_POT_PIN, 18.0);
+  leftPID.run();
+  rightPID.run();
 
-  actuatorServo.writeMicroseconds(moveSpeed + 1500); // stop signal
+  if (fabs(leftMoveSpeed) < 10)
+    leftMoveSpeed = 0;
+
+  if (fabs(rightMoveSpeed) < 10)
+    rightMoveSpeed = 0;
+
+  leftArmServo.writeMicroseconds(leftMoveSpeed + 1500); // stop signal
+  rightArmServo.writeMicroseconds(rightMoveSpeed + 1500); // stop signal
 
   if (digitalRead(E_STOP_PIN) == HIGH)
   {
@@ -219,25 +246,15 @@ void loop() // run over and over
         talonServo.write(1500);
 
         // Handle the message
-        Serial.print("GOT MESSAGE\t");
         // Normal operation
         leftSpeed = (data[0] << 8) | data[1];
-        Serial.print(leftSpeed);
-        Serial.print("\t");
         rightSpeed = (data[2] << 8) | data[3];
-        Serial.print(rightSpeed);
-        Serial.print("\t");
 
         leftArmLength = (data[4] << 8) | data[5];
-
-        target = mapfloat(leftArmLength, -32768, 32767, 0.0, 18.0);
-        Serial.print(target);
-        Serial.print("\t");
-        Serial.print(position);
-        Serial.print("\t");
-        Serial.println(moveSpeed);
+        leftTarget = mapfloat(leftArmLength, -32768, 32767, 0.0, 18.0);
 
         rightArmLength = (data[6] << 8) | data[7];
+        rightTarget = mapfloat(rightArmLength, -32768, 32767, 0.0, 18.0);
 
         leftArmAngle = (data[8] << 8) | data[9];
         rightArmAngle = (data[10] << 8) | data[11];
@@ -333,8 +350,11 @@ void loop() // run over and over
     status = 0;
   }
 
-  int angleSpeed = map(leftArmAngle, -32768, 32767, -500, 500);
-  actuatorServo2.writeMicroseconds(angleSpeed + 1500);
+  int leftAngleSpeed = map(leftArmAngle, -32768, 32767, -500, 500);
+  leftElevServo.writeMicroseconds(leftAngleSpeed + 1500);
+
+  int rightAngleSpeed = map(rightArmAngle, -32768, 32767, -500, 500);
+  rightElevServo.writeMicroseconds(rightAngleSpeed + 1500);
 
   digitalWrite(DIR1, leftSpeed >= 0);
   digitalWrite(DIR2, rightSpeed >= 0);

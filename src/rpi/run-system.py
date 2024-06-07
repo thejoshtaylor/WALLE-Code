@@ -81,8 +81,11 @@ def triggerUpdate():
 	# Right stick (arm elevation)
 	if r3_vert != r3_vert_old or r3_horz != r3_horz_old or r2 != r2_old:
 		leftArmLength = r2
+		rightArmLength = r2
 		leftArmAngle = r3_vert
+		rightArmAngle = r3_vert
 		leftWingAngle = r3_horz
+		rightWingAngle = r3_horz
 		send_default_packet()
 		r3_vert_old = r3_vert
 		r3_horz_old = r3_horz
