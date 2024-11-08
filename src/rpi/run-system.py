@@ -12,24 +12,28 @@ import time
 # CONSTANT variables
 AVG_POINTS = 10
 
-l3_vert_old = 0
-l3_horz_old = 0
-r3_vert_old = 0
-r3_horz_old = 0
+l3_vert_old = 0 # vertical component of L3 toggle, related to forward drive velocity
+l3_horz_old = 0 # horizontal component of L3 toggle, related to sideways drive velocity
+r3_vert_old = 0 # vertical component of R3 toggle, related to upper arm/shoulder flexion
+r3_horz_old = 0 # horizontal component of R3 toggle, related to upper arm abduction (ie. lateral raise)
+wristbro_old = 0 # represents wrist angle for both wrists (just testing functionality)
 r2_old = -32768
 l2_old = -32768
 
-l3_vert_pre = 0
+
+l3_vert_pre = 0 # pre means pre-filtered values
 l3_horz_pre = 0
 r3_vert_pre = 0
 r3_horz_pre = 0
 r2_pre = -32768
 l2_pre = -32768
 
+
 l3_vert = 0
 l3_horz = 0
 r3_vert = 0
 r3_horz = 0
+wristbro = 0;
 r2 = -32768
 l2 = -32768
 
@@ -42,6 +46,7 @@ filter_objects = {
 
     'r2': [r2_pre] * AVG_POINTS,
     'l2': [l2_pre] * AVG_POINTS,
+
 }
 
 #
@@ -55,7 +60,7 @@ def updateFilters():
     for key in filter_objects:
         filter_objects[key].pop(0)
         value = globals()[key + '_pre']
-        if abs(value) < 800:
+        if abs(value) < 800: # stops whining :o, high-frequency mini-corrections for the position of the actuator
             value = 0
         filter_objects[key].append(value)
 		
@@ -69,8 +74,8 @@ def updateFilters():
     triggerUpdate()
 
 def triggerUpdate():
-	global l3_vert_old, l3_horz_old, r3_vert_old, r3_horz_old, r2_old, l2_old
-	global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2
+	global l3_vert_old, l3_horz_old, r3_vert_old, r3_horz_old, r2_old, l2_old, wristbro_old
+	global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2, wristbro
 	global leftArmLength, leftArmAngle, leftWingAngle, rightArmLength, rightArmAngle, rightWingAngle, leftHandAngle, rightHandAngle
 	# Left stick (tank drive)
 	if l3_vert != l3_vert_old or l3_horz != l3_horz_old:
@@ -86,7 +91,11 @@ def triggerUpdate():
 		rightArmAngle = r3_vert
 		leftWingAngle = r3_horz
 		rightWingAngle = r3_horz
-		send_default_packet()
+		leftHandAngle = wristbro
+		rightHandAngle = wristbro
+		# update wristAngle
+		# ps4 controller library to understand more about controller input formatting
+		send_default_packet() # sends updated variables to teensy
 		r3_vert_old = r3_vert
 		r3_horz_old = r3_horz
 		r2_old = r2
@@ -103,6 +112,10 @@ def triggerUpdate():
 		# send_shredder_packet()
 		l2_old = l2
 
+	if wristbro != wristbro_old:
+		leftHandAngle = wristbro
+		rightHandAngle = wristbro
+
 		
 # Update PIDs on a regular interval
 def filterThread():
@@ -116,19 +129,19 @@ intro = [0x55, 0x4f, 0x02, 0x39, 0x81, 0xc4]
 terminator = [0x0c, 0xf7, 0x13, 0x85, 0x3f, 0x5a]
 
 # Default message parameters
-leftSpeed = 0
-rightSpeed = 0
+leftSpeed = 0 # leftSpeed is the leftward tank drive speed
+rightSpeed = 0 # rightSpeed is the rightward tank drive speed
 
-leftArmLength = 0
-rightArmLength = 0
+leftArmLength = 0 # this is related to forearm length
+rightArmLength = 0 
 
-leftArmAngle = 0
+leftArmAngle = 0 # this is related to upper arm angle
 rightArmAngle = 0
 
-leftWingAngle = 0
+leftWingAngle = 0 # this is the arm abduction angle
 rightWingAngle = 0
 
-leftHandAngle = 0
+leftHandAngle = 0 # this is the wrist servo
 rightHandAngle = 0
 
 bigFaceLatch = True
@@ -175,7 +188,10 @@ def send_default_packet():
 	data += struct.pack('>h', prep(leftHandAngle))
 	data += struct.pack('>h', prep(rightHandAngle))
 
-	data += struct.pack('>B', bigFaceLatch)
+
+	data += struct.pack('>B', bigFaceLatch) # sending 32 max bytes of data, bigFaceLatch is an on-off (1) byte, but other inputs are 2-4 bytes long
+
+	
 
 	# fill in the rest of the 32 bytes
 	for i in range(0, 32 - len(data)):
@@ -503,7 +519,14 @@ class MyController(Controller):
 		shredder_good = False
 
 		send_shredder_packet()
-	
+
+	def on_circle_press(self, ):
+		global wristbro
+		wristbro_pre = 90
+
+	def on_circle_release(self, ):
+		global wristbro
+		wristbro = 0
 
 # Start the thread
 import threading
