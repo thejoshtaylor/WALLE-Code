@@ -33,7 +33,7 @@ l3_vert = 0
 l3_horz = 0
 r3_vert = 0
 r3_horz = 0
-wristbro = 0;
+wristbro = 0
 r2 = -32768
 l2 = -32768
 
@@ -529,7 +529,7 @@ class MyController(Controller):
 
 	def on_circle_press(self, ):
 		global wristbro
-		wristbro_pre = 90.0
+		wristbro = 90.0
 		
 
 	def on_circle_release(self, ):
