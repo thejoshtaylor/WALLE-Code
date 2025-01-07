@@ -523,12 +523,12 @@ class MyController(Controller):
 	def on_circle_press(self, ):
 		global wristbro
 		wristbro_pre = 90.0
-		send_shredder_packet()
+		
 
 	def on_circle_release(self, ):
 		global wristbro
 		wristbro = 0.0
-		send_shredder_packet()
+		
 
 # Start the thread
 import threading
