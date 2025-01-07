@@ -74,8 +74,8 @@ def updateFilters():
     triggerUpdate()
 
 def triggerUpdate():
-	global l3_vert_old, l3_horz_old, r3_vert_old, r3_horz_old, r2_old, l2_old, wristbro_old
-	global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2, wristbro
+	global l3_vert_old, l3_horz_old, r3_vert_old, r3_horz_old, r2_old, l2_old, #wristbro_old
+	global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2, #wristbro
 	global leftArmLength, leftArmAngle, leftWingAngle, rightArmLength, rightArmAngle, rightWingAngle, leftHandAngle, rightHandAngle
 	# Left stick (tank drive)
 	if l3_vert != l3_vert_old or l3_horz != l3_horz_old:
@@ -522,11 +522,13 @@ class MyController(Controller):
 
 	def on_circle_press(self, ):
 		global wristbro
-		wristbro_pre = 90
+		wristbro_pre = 90.0
+		send_shredder_packet()
 
 	def on_circle_release(self, ):
 		global wristbro
-		wristbro = 0
+		wristbro = 0.0
+		send_shredder_packet()
 
 # Start the thread
 import threading

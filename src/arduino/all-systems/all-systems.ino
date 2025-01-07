@@ -118,8 +118,8 @@ void setup()
   leftElevServo.attach(L_ELEV_ACTUATOR_PIN);
   rightArmServo.attach(R_FOREARM_ACTUATOR_PIN);
   rightElevServo.attach(R_ELEV_ACTUATOR_PIN);
-  leftwristbro.attach(L_WRISTBRO);
-  rightwristbro.attach(R_WRISTBRO);
+  //leftwristbro.attach(L_WRISTBRO_PIN);
+  //rightwristbro.attach(R_WRISTBRO_PIN);
 
   pinMode(L_FOREARM_POT_PIN, INPUT);
   pinMode(L_ELEV_POT_PIN, INPUT);
@@ -364,8 +364,8 @@ void loop() // run over and over
   int rightAngleSpeed = map(rightArmAngle, -32768, 32767, -500, 500);
   rightElevServo.writeMicroseconds(rightAngleSpeed + 1500);
 
-  leftwristbro.write(leftHandAngle);
-  rightwristbro.write(rightHandAngle);
+  //leftwristbro.write(leftHandAngle);
+  //rightwristbro.write(rightHandAngle);
 
   digitalWrite(DIR1, leftSpeed >= 0);
   digitalWrite(DIR2, rightSpeed >= 0);
