@@ -74,8 +74,8 @@ def updateFilters():
     triggerUpdate()
 
 def triggerUpdate():
-	global l3_vert_old, l3_horz_old, r3_vert_old, r3_horz_old, r2_old, l2_old, #wristbro_old
-	global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2, #wristbro
+	global l3_vert_old, l3_horz_old, r3_vert_old, r3_horz_old, r2_old, l2_old, wristbro_old
+	global l3_vert, l3_horz, r3_vert, r3_horz, r2, l2, wristbro
 	global leftArmLength, leftArmAngle, leftWingAngle, rightArmLength, rightArmAngle, rightWingAngle, leftHandAngle, rightHandAngle
 	# Left stick (tank drive)
 	if l3_vert != l3_vert_old or l3_horz != l3_horz_old:
@@ -91,14 +91,21 @@ def triggerUpdate():
 		rightArmAngle = r3_vert
 		leftWingAngle = r3_horz
 		rightWingAngle = r3_horz
-		leftHandAngle = wristbro
-		rightHandAngle = wristbro
+		
 		# update wristAngle
 		# ps4 controller library to understand more about controller input formatting
 		send_default_packet() # sends updated variables to teensy
 		r3_vert_old = r3_vert
 		r3_horz_old = r3_horz
 		r2_old = r2
+
+	# circle button (wrist control)
+	if wristbro != wristbro_old:
+		leftHandAngle = wristbro
+		rightHandAngle = wristbro
+		send_default_packet()
+		wristbro_old = wristbro
+
 
 	global shredder_good, shredder_value
 
