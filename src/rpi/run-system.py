@@ -119,10 +119,6 @@ def triggerUpdate():
 		# send_shredder_packet()
 		l2_old = l2
 
-	if wristbro != wristbro_old:
-		leftHandAngle = wristbro
-		rightHandAngle = wristbro
-
 		
 # Update PIDs on a regular interval
 def filterThread():
