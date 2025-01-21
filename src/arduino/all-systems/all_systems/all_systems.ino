@@ -281,8 +281,8 @@ void loop() // run over and over
         leftWingAngle = (data[12] << 8) | data[13];
         rightWingAngle = (data[14] << 8) | data[15];
 
-        leftWingAngle = mapfloat(leftWingAngle, -32768, 32767, 0, 180);
-        rightWingAngle = mapfloat(rightWingAngle, -32768, 32767, 0, 180);
+        leftWingAngle = mapfloat(leftWingAngle, -32768, 32767, 20, 90);
+        rightWingAngle = mapfloat(rightWingAngle, -32768, 32767, 20, 90);
 
         leftHandAngle = (data[16] << 8) | data[17];
         rightHandAngle = (data[18] << 8) | data[19];
