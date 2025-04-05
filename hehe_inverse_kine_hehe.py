@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 # x and y are inputs representing the position of Wall-E's hands relative to the base of actuator 2 (in inches)
 # x = np.linspace(20, 40, 100)  # x-position input (in inches)
 t = np.linspace(0,10,1000)
-x = 20 + 5 * np.sin(2 * np.pi * t /10)  # x-position input (in inches)
-y = -20  # y-position input (in inches)
+x = 10 * np.sin(2 * np.pi * t / 5)  # x-position input (in inches)
+y = -15  # y-position input (in inches)
 
 # The program should find L1 and L2 to satisfy these requirements
 r = 10  # r is the distance from the base of actuator 1 to the base of actuator 2 (in inches)
