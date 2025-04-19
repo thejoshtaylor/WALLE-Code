@@ -412,8 +412,9 @@ class MyController(Controller):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
 		r3_vert_pre = 0
-		'''
 		overall_time = time.time() - start_time  # Continuously increasing global time
+		'''
+		
     	local_time = overall_time % 10  # Wrap every 10 seconds
 		t = local_time
 		x = 20 + 5 * np.sin(2 * np.pi * t /10)  # x-position input (in inches)
