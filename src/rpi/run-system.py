@@ -3,7 +3,6 @@ import serial
 from time import sleep
 import struct
 from math import atan2, sqrt, pi
-from sklearn.preprocessing import MinMaxScaler
 
 ser = serial.Serial("/dev/ttyS0", 115200)
 
