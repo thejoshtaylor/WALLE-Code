@@ -1,10 +1,8 @@
 from pyPS4Controller.controller import Controller
 import serial
 from time import sleep
-import time
 import struct
 from math import atan2, sqrt, pi
-import numpy as np
 
 ser = serial.Serial("/dev/ttyS0", 115200)
 
