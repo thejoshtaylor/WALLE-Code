@@ -3,12 +3,15 @@ import serial
 from time import sleep
 import struct
 from math import atan2, sqrt, pi
+import numpy as np
+import time
 
 ser = serial.Serial("/dev/ttyS0", 115200)
 
 import statistics
 import time
 
+start_time = time.time()  # Global time variable
 # CONSTANT variables
 AVG_POINTS = 10
 
@@ -407,7 +410,32 @@ class MyController(Controller):
 
 	def on_R3_y_at_rest(self, ):
 		global r3_vert_pre # this is related to the value of L1, or shoulder flexion
-		r3_vert_pre = 0
+		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
+		overall_time = time.time() - start_time  # Continuously increasing global time
+    	local_time = overall_time % 10  # Wrap every 10 seconds
+		t = local_time
+		x = 20 + 5 * np.sin(2 * np.pi * t /10)  # x-position input (in inches)
+		y = -20  # y-position input (in inches)
+
+		# The program should find L1 and L2 to satisfy these requirements
+		r = 10  # r is the distance from the base of actuator 1 to the base of actuator 2 (in inches)
+		x0 = r * np.cos(np.deg2rad(80))  # x0 is the horizontal component of r, assuming its angle is 80 degrees (in inches)
+		y0 = r * np.sin(np.deg2rad(80))  # y0 is the vertical component of r, assuming its angle is 80 degrees (in inches)
+		L2 = 2  # L2 is the length of the link that connects the end of actuator 1 and the base of actuator 2 (in inches)
+
+		L3 = np.sqrt(x**2 + y**2)  # L3 is the distance from the base of actuator 2 to Wall-E's hands, or the end of actuator 2 (in inches)
+		theta3 = np.rad2deg(np.arctan(y / x))  # theta3 is the angle of actuator 2 relative to horizontal. Returns between -90 degrees and 90 degrees
+		theta2 = 200 - theta3  # theta2 is the angle of the link connecting actuator 1 and 2
+		L1 = np.sqrt(r**2 - 2 * L2 * (x0 * np.cos(np.deg2rad(theta2)) + y0 * np.sin(np.deg2rad(theta2))) + L2**2)  # L1 is the length of actuator 1 (in inches)
+		
+		forearm = L1 - 3 # this is the length of the forearm
+		upperArm = L3 - 3 # this is the length of the upper arm
+
+		# global leftArmAngle
+		# leftArmAngle = 0
+		r3_horiz_pre = (65536 / 18) * forearm - 32768
+		r3_vert_pre = (65536 / 18) * upperArm - 32768 # we want to return a pre-filtered value even though we can calculate the post-filtered one. This simplifies the code in that we're already 
+		# filtering the value from the 2 other R3 functions, so we can maintain consistency here.
 		# send_default_packet()
 
 	def on_R3_left(self, value):
