@@ -452,11 +452,11 @@ class MyController(Controller):
 		r3_horz_pre = value
 		# send_default_packet()
 
-	def on_R3_x_at_rest(self, ):
-		global r3_horz_pre
+	#def on_R3_x_at_rest(self, ):
+	#	global r3_horz_pre
 		# global leftWingAngle
 		# leftWingAngle = 0
-		r3_horz_pre = 0
+	#	r3_horz_pre = 0
 		# send_default_packet()
 
 
