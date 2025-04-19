@@ -37,8 +37,6 @@ wristbro = 0
 r2 = -32768
 l2 = -32768
 
-start_time = time.time()  # Get the starting time
-
 filter_objects = {
     'l3_vert': [l3_vert_pre] * AVG_POINTS,
     'l3_horz': [l3_horz_pre] * AVG_POINTS,
