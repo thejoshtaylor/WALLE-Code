@@ -3,6 +3,7 @@ import serial
 from time import sleep
 import struct
 from math import atan2, sqrt, pi
+import numpy as np
 
 ser = serial.Serial("/dev/ttyS0", 115200)
 
