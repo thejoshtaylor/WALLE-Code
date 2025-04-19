@@ -411,7 +411,7 @@ class MyController(Controller):
 
 	def on_R3_y_at_rest(self, ):
 		global r3_vert_pre # this is related to the value of L1, or shoulder flexion
-		r3vert_pre = 0
+		r3_vert_pre = 0
 		# send_default_packet()
 
 	def on_R3_left(self, value):
