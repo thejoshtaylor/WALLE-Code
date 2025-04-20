@@ -409,9 +409,9 @@ class MyController(Controller):
 		print(r3_vert_pre)
 		# send_default_packet()
 		
-	def on_R3_up(self, ):
+	def on_R3_up(self, value):
 		global r3_vert_pre
-		r3_vert_pre = 0
+		r3_vert_pre = -value
 		print(r3_vert_pre)
 		# send_default_packet()
 	
