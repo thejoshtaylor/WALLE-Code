@@ -458,7 +458,7 @@ class MyController(Controller):
 		r3_vert_pre = (65536 / 18) * upperArm - 32768 # we want to return a pre-filtered value even though we can calculate the post-filtered one. This simplifies the code in that we're already 
 		# filtering the value from the 2 other R3 functions, so we can maintain consistency here.'''
 		# send_default_packet()
-		'''
+		
 
 	def on_R3_left(self, value):
 		global r3_horz_pre
