@@ -411,19 +411,19 @@ class MyController(Controller):
 	def on_R3_up(self, ):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
-		r3_vert_pre = 16000
+		r3_vert_pre = 0
 		# send_default_packet()
 
 	def on_R3_down(self, ):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
-		r3_vert_pre = 16000
+		r3_vert_pre = 0
 		# send_default_packet()
 		
 	def on_R3_y_at_rest(self, ):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
-		r3_vert_pre = 16000
+		r3_vert_pre = 0
 		overall_time = time.time() - start_time  # Continuously increasing global time
 		'''
 		
