@@ -411,7 +411,7 @@ class MyController(Controller):
 	def on_R3_y_at_rest(self, ):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
-		r3_vert_pre = 0
+		r3_vert_pre = 16000
 		overall_time = time.time() - start_time  # Continuously increasing global time
 		'''
 		
