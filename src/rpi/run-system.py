@@ -418,7 +418,6 @@ class MyController(Controller):
 	def on_R3_y_at_rest(self, ):
 		global r3_vert_pre
 		r3_vert_pre = 0
-		overall_time = time.time() - start_time  # Continuously increasing global time
 		
 	def on_R3_left(self, value):
 		global r3_horz_pre
