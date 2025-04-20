@@ -394,11 +394,11 @@ class MyController(Controller):
 		# update_drive(x=self.last_drive_x, y=0)
 
 	# Right stick (arm elevation)
-	def on_R3_up(self, value):
-		global r3_vert_pre
+	#def on_R3_up(self, value):
+	#	global r3_vert_pre
 		# global leftArmAngle
 		# leftArmAngle = value
-		r3_vert_pre = -value
+	#	r3_vert_pre = -value
 		# send_default_packet()
 
 	def on_R3_down(self, value):
@@ -408,13 +408,18 @@ class MyController(Controller):
 		r3_vert_pre = -value
 		# send_default_packet()
 		
-	'''
 	def on_R3_up(self, ):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
 		r3_vert_pre = 0
 		# send_default_packet()
-
+	
+	def on_R3_y_at_rest(self, ):
+		global r3_vert_pre
+		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
+		r3_vert_pre = 0
+		overall_time = time.time() - start_time  # Continuously increasing global time
+    '''
 	def on_R3_down(self, ):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
@@ -426,13 +431,6 @@ class MyController(Controller):
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
 		r3_vert_pre = 0
 		overall_time = time.time() - start_time  # Continuously increasing global time
-	'''
-	def on_R3_y_at_rest(self, ):
-		global r3_vert_pre
-		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
-		r3_vert_pre = 0
-		overall_time = time.time() - start_time  # Continuously increasing global time
-		'''
     	local_time = overall_time % 10  # Wrap every 10 seconds
 		t = local_time
 		x = 20 + 5 * np.sin(2 * np.pi * t /10)  # x-position input (in inches)
@@ -456,10 +454,9 @@ class MyController(Controller):
 		# leftArmAngle = 0
 		r3_horiz_pre = (65536 / 18) * forearm - 32768
 		r3_vert_pre = (65536 / 18) * upperArm - 32768 # we want to return a pre-filtered value even though we can calculate the post-filtered one. This simplifies the code in that we're already 
-		# filtering the value from the 2 other R3 functions, so we can maintain consistency here.'''
-		# send_default_packet()
+		# filtering the value from the 2 other R3 functions, so we can maintain consistency here.
+		# send_default_packet()'''
 		
-
 	def on_R3_left(self, value):
 		global r3_horz_pre
 		# global leftWingAngle
