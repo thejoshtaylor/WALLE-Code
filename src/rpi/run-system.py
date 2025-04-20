@@ -394,7 +394,7 @@ class MyController(Controller):
 		# update_drive(x=self.last_drive_x, y=0)
 
 	# Right stick (arm elevation)
-	def on_R3_up(self, value):
+	'''def on_R3_up(self, value):
 		global r3_vert_pre
 		# global leftArmAngle
 		# leftArmAngle = value
@@ -407,7 +407,19 @@ class MyController(Controller):
 		# leftArmAngle = value
 		r3_vert_pre = -value
 		# send_default_packet()
+		'''
+	def on_R3_up(self, ):
+		global r3_vert_pre
+		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
+		r3_vert_pre = 16000
+		# send_default_packet()
 
+	def on_R3_down(self, ):
+		global r3_vert_pre
+		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
+		r3_vert_pre = 16000
+		# send_default_packet()
+		
 	def on_R3_y_at_rest(self, ):
 		global r3_vert_pre
 		global r3_horiz_pre # this is related to the value of L3, or elbow flexion
